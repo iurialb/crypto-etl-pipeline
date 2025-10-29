@@ -1,0 +1,41 @@
+# API and HTTP requests
+requests==2.31.0
+python-dotenv==1.0.0
+
+# Data manipulation
+pandas==2.1.4
+numpy==1.26.2
+
+# Database
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+
+# Data validation
+pydantic==2.5.3
+
+# Configuration
+pyyaml==6.0.1
+
+# Logging
+loguru==0.7.2
+
+# Scheduling (optional)
+schedule==1.2.0
+
+# Visualization (for notebooks)
+plotly==5.18.0
+matplotlib==3.8.2
+seaborn==0.13.0
+
+# Jupyter
+jupyter==1.0.0
+ipykernel==6.27.1
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Code quality
+black==23.12.1
+flake8==7.0.0
+isort==5.13.2

@@ -1,0 +1,53 @@
+# Crypto ETL Pipeline Configuration
+
+# Cryptocurrencies to track
+cryptocurrencies:
+  - bitcoin
+  - ethereum
+  - binancecoin
+  - cardano
+  - solana
+  - polkadot
+  - dogecoin
+  - avalanche-2
+  - chainlink
+  - polygon
+
+# Currency for pricing
+vs_currency: usd
+
+# Data extraction settings
+extraction:
+  batch_size: 10
+  retry_attempts: 3
+  retry_delay: 5  # seconds
+  timeout: 30  # seconds
+
+# Metrics to calculate
+metrics:
+  volatility_window: 7  # days
+  correlation_window: 30  # days
+  moving_averages:
+    - 7
+    - 30
+    - 90
+  sharpe_ratio_risk_free_rate: 0.02  # 2% annual
+
+# Data quality thresholds
+quality_checks:
+  max_null_percentage: 0.05  # 5%
+  min_price_value: 0
+  max_price_change_percentage: 50  # flag if price changes more than 50% in one day
+
+# Database settings
+database:
+  schema: public
+  table_prefix: crypto_
+  use_partitioning: true
+  partition_by: date
+
+# Logging
+logging:
+  format: json
+  rotation: "1 day"
+  retention: "30 days"
