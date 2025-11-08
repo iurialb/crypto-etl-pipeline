@@ -2,6 +2,7 @@
 Database connection and operations module
 """
 import pandas as pd
+import json
 from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.pool import NullPool
 from datetime import datetime, date
@@ -48,85 +49,6 @@ class DatabaseManager:
             logger.error(f"Failed to connect to database: {str(e)}")
             raise
     
-    def _split_sql_statements(self, sql: str) -> List[str]:
-        """
-        Split SQL into statements, respecting dollar-quoted strings
-        
-        Args:
-            sql: SQL string to split
-            
-        Returns:
-            List of SQL statements
-        """
-        statements = []
-        current_statement = []
-        in_dollar_quote = False
-        dollar_tag = None
-        
-        i = 0
-        while i < len(sql):
-            # If we're inside a dollar quote, check for end first
-            if in_dollar_quote:
-                # Safety check: dollar_tag should be defined
-                if dollar_tag is None:
-                    raise ValueError("Invalid state: in_dollar_quote is True but dollar_tag is None")
-                
-                # Check if we've reached the end of the dollar quote
-                tag_len = len(dollar_tag)
-                if i + tag_len <= len(sql) and sql[i:i+tag_len] == dollar_tag:
-                    current_statement.append(dollar_tag)
-                    in_dollar_quote = False
-                    i += tag_len
-                    dollar_tag = None
-                    continue
-                else:
-                    # Still inside dollar quote, add character
-                    current_statement.append(sql[i])
-                    i += 1
-                    continue
-            
-            # Not in dollar quote, check for start
-            if sql[i] == '$':
-                # Find the full dollar tag (could be $$ or $tag$)
-                tag_start = i
-                i += 1
-                # Collect tag name (between $ and $)
-                while i < len(sql) and sql[i] != '$':
-                    i += 1
-                if i < len(sql):
-                    # Found closing $, we have a complete dollar tag
-                    dollar_tag = sql[tag_start:i+1]
-                    in_dollar_quote = True
-                    current_statement.append(dollar_tag)
-                    i += 1
-                    continue
-                else:
-                    # No closing $ found, treat as regular character
-                    current_statement.append(sql[tag_start])
-                    i = tag_start + 1
-                    continue
-            
-            # Regular character processing
-            char = sql[i]
-            current_statement.append(char)
-            
-            # If we hit a semicolon (and not in dollar quote), it's a statement separator
-            if char == ';':
-                statement = ''.join(current_statement).strip()
-                if statement:
-                    statements.append(statement)
-                current_statement = []
-            
-            i += 1
-        
-        # Add any remaining statement
-        if current_statement:
-            statement = ''.join(current_statement).strip()
-            if statement:
-                statements.append(statement)
-        
-        return statements
-    
     def initialize_schema(self, schema_file: str = "sql/schema.sql"):
         """
         Initialize database schema from SQL file
@@ -144,13 +66,9 @@ class DatabaseManager:
             schema_sql = f.read()
         
         try:
+            # Execute as a single transaction instead of splitting
             with self.engine.begin() as conn:
-                # Split SQL statements respecting dollar-quoted strings
-                statements = self._split_sql_statements(schema_sql)
-                
-                for statement in statements:
-                    if statement.strip():
-                        conn.execute(text(statement))
+                conn.execute(text(schema_sql))
             
             logger.info("Database schema initialized successfully")
             
@@ -347,7 +265,7 @@ class DatabaseManager:
         coins_processed: int = 0,
         records_inserted: int = 0,
         records_updated: int = 0,
-        execution_time: float = 0,
+        execution_time_seconds: float = 0,
         error_message: str = None,
         metadata: Dict = None
     ) -> int:
@@ -359,38 +277,45 @@ class DatabaseManager:
             coins_processed: Number of coins processed
             records_inserted: Number of records inserted
             records_updated: Number of records updated
-            execution_time: Execution time in seconds
+            execution_time_seconds: Execution time in seconds
             error_message: Error message if failed
             metadata: Additional metadata as JSON
             
         Returns:
             Run ID
         """
-        log_data = pd.DataFrame([{
-            'run_timestamp': datetime.now(),
-            'status': status,
-            'coins_processed': coins_processed,
-            'records_inserted': records_inserted,
-            'records_updated': records_updated,
-            'execution_time_seconds': execution_time,
-            'error_message': error_message,
-            'metadata': str(metadata) if metadata else None
-        }])
+        # Convert metadata to JSON string
+        metadata_json = json.dumps(metadata) if metadata else None
         
-        log_data.to_sql(
-            'etl_run_log',
-            self.engine,
-            if_exists='append',
-            index=False
-        )
-        
-        logger.info(f"ETL run logged: {status}")
-        
-        # Get the run_id of the inserted record
-        with self.engine.connect() as conn:
-            result = conn.execute(text("SELECT MAX(run_id) as run_id FROM etl_run_log"))
+        # Use direct SQL execution to handle JSONB properly
+        with self.engine.begin() as conn:
+            sql = text("""
+                INSERT INTO etl_run_log (
+                    run_timestamp, status, coins_processed, records_inserted, 
+                    records_updated, execution_time_seconds, error_message, metadata
+                )
+                VALUES (
+                    :run_timestamp, :status, :coins_processed, :records_inserted,
+                    :records_updated, :execution_time_seconds, :error_message, 
+                    CAST(:metadata AS jsonb)
+                )
+                RETURNING run_id
+            """)
+            
+            result = conn.execute(sql, {
+                'run_timestamp': datetime.now(),
+                'status': status,
+                'coins_processed': coins_processed,
+                'records_inserted': records_inserted,
+                'records_updated': records_updated,
+                'execution_time_seconds': execution_time_seconds,
+                'error_message': error_message,
+                'metadata': metadata_json
+            })
+            
             run_id = result.fetchone()[0]
         
+        logger.info(f"ETL run logged: {status}")
         return run_id
     
     def query(self, sql: str, params: Dict = None) -> pd.DataFrame:
