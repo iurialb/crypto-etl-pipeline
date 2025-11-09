@@ -36,12 +36,12 @@ CREATE TABLE fact_crypto_metrics (
     circulating_supply DECIMAL(20, 2),
     
     -- Price changes
-    price_change_24h DECIMAL(20, 8),
-    price_change_7d DECIMAL(20, 8),
-    price_change_30d DECIMAL(20, 8),
-    price_change_percentage_24h DECIMAL(15, 6),
-    price_change_percentage_7d DECIMAL(15, 6),
-    price_change_percentage_30d DECIMAL(15, 6),
+    price_change_24h DECIMAL(10, 4),
+    price_change_7d DECIMAL(10, 4),
+    price_change_30d DECIMAL(10, 4),
+    price_change_percentage_24h DECIMAL(10, 4),
+    price_change_percentage_7d DECIMAL(10, 4),
+    price_change_percentage_30d DECIMAL(10, 4),
     
     -- Market metrics
     market_dominance_pct DECIMAL(10, 6),
@@ -62,10 +62,10 @@ CREATE TABLE fact_crypto_metrics (
     
     -- Additional metrics
     ath DECIMAL(20, 8),
-    ath_change_percentage DECIMAL(10, 4),
+    atl_change_percentage DECIMAL(15, 6),
     ath_date TIMESTAMP,
     atl DECIMAL(20, 8),
-    atl_change_percentage DECIMAL(10, 4),
+    ath_change_percentage DECIMAL(15, 6),
     atl_date TIMESTAMP,
     
     -- Metadata
