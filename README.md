@@ -3,15 +3,15 @@
 > A production-ready end-to-end ETL pipeline for cryptocurrency market analysis with advanced financial metrics and data quality monitoring.
 
 ## 📋 Table of Contents
-- [Project Overview](#-project-overview)
-- [Key Features](#-key-features)
-- [Architecture](#%EF%B8%8F-architecture)
-- [Technology Stack](#-technology-stack)
-- [Getting Started](#-getting-started)
-- [Usage](#-usage)
-- [Project Structure](#-project-structure)
-- [Metrics & Analytics](#-metrics--analytics)
-- [Data Quality](#-data-quality)
+- [Project Overview](#project-overview)
+- [Key Features](#key-features)
+- [Architecture](#architecture)
+- [Technology Stack](#technology-stack)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Metrics & Analytics](#metrics--analytics)
+- [Data Quality](#data-quality)
 
 ---
 
@@ -198,7 +198,7 @@ Records inserted: 21
 
 ---
 
-## 💡 Usage
+## Usage
 
 ### Running the Pipeline
 ```bash
@@ -244,7 +244,7 @@ pytest tests/ --cov=src --cov-report=html
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 crypto-etl-pipeline/
@@ -294,7 +294,7 @@ crypto-etl-pipeline/
 
 ---
 
-## 📈 Metrics & Analytics
+## Metrics & Analytics
 
 ### Market Dominance Index
 Calculates each cryptocurrency's percentage of total market capitalization.
