@@ -106,7 +106,55 @@ def main():
         else:
             print("No correlation data available yet")
         
-        # Query 6: ETL logs
+        # Query 6: Volatility ranking
+        logger.info("\n⚡ Most Volatile Cryptocurrencies:")
+        df = db.query("""
+            SELECT 
+                coin_id,
+                name,
+                volatility_7d,
+                volatility_30d,
+                price_change_percentage_24h
+            FROM v_latest_crypto_metrics
+            WHERE volatility_30d IS NOT NULL
+            ORDER BY volatility_30d DESC
+            LIMIT 5
+        """)
+        if not df.empty:
+            print(df.to_string(index=False))
+        else:
+            print("No volatility data available yet")
+        
+        # Query 7: Price vs ATH comparison
+        logger.info("\n📉 Distance from All-Time High:")
+        df = db.query("""
+            SELECT 
+                coin_id,
+                name,
+                ROUND(current_price::numeric, 2) as current_price,
+                ROUND(ath::numeric, 2) as ath,
+                ROUND(ath_change_percentage::numeric, 2) as pct_from_ath
+            FROM v_latest_crypto_metrics
+            ORDER BY ath_change_percentage
+            LIMIT 5
+        """)
+        print(df.to_string(index=False))
+        
+        # Query 8: Market dominance breakdown
+        logger.info("\n🥧 Market Dominance Distribution:")
+        df = db.query("""
+            SELECT 
+                coin_id,
+                name,
+                ROUND(market_dominance_pct::numeric, 2) as dominance_pct,
+                ROUND((market_cap / 1000000000)::numeric, 2) as market_cap_billions
+            FROM v_latest_crypto_metrics
+            ORDER BY market_dominance_pct DESC
+            LIMIT 5
+        """)
+        print(df.to_string(index=False))
+        
+        # Query 9: ETL logs
         logger.info("\n📝 Recent ETL Runs:")
         df = db.query("""
             SELECT 
