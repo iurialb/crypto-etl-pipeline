@@ -383,6 +383,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **Iuri Albuquerque**
 - GitHub: [@iurialb](https://github.com/iurialb)
+- [Linkedin] (https://www.linkedin.com/in/iurialbuquerque/)
 
 ---
 
