@@ -22,45 +22,45 @@ Cryptocurrency markets generate massive amounts of real-time data. Making inform
 
 ### The Solution
 This project implements a complete **ETL (Extract, Transform, Load) pipeline** that:
-1. **Extracts** real-time cryptocurrency data from CoinGecko API
-2. **Transforms** raw data into actionable insights using advanced financial metrics
-3. **Loads** processed data into a PostgreSQL data warehouse for analysis
-4. **Validates** data quality at every step to ensure reliability
+1. **Extracts** real-time cryptocurrency data from CoinGecko API;
+2. **Transforms** raw data into actionable insights using advanced financial metrics;
+3. **Loads** processed data into a PostgreSQL data warehouse for analysis;
+4. **Validates** data quality at every step to ensure reliability.
 
 ### Project Goals
-- ✅ Build a **scalable** and **maintainable** data pipeline
-- ✅ Implement **advanced financial metrics** beyond basic price tracking
-- ✅ Ensure **data quality** with automated validation checks
-- ✅ Create a **professional-grade** portfolio project demonstrating data engineering skills
-- ✅ Enable **data-driven insights** for cryptocurrency market analysis
+- ✅ Build a **scalable** and **maintainable** data pipeline;
+- ✅ Implement **advanced financial metrics** beyond basic price tracking;
+- ✅ Ensure **data quality** with automated validation checks;
+- ✅ Create a **professional-grade** portfolio project demonstrating data engineering skills;
+- ✅ Enable **data-driven insights** for cryptocurrency market analysis.
 
 ---
 
 ## Key Features
 
 ### 🔄 Complete ETL Pipeline
-- **Extraction**: Reliable API integration with retry logic and rate limiting
-- **Transformation**: Advanced metrics calculation with pandas
-- **Loading**: Efficient bulk inserts with idempotent operations
+- **Extraction**: Reliable API integration with retry logic and rate limiting;
+- **Transformation**: Advanced metrics calculation with pandas;
+- **Loading**: Efficient bulk inserts with idempotent operations.
 
 ### 📊 Advanced Financial Metrics
-- **Market Dominance Index** - Track each coin's share of total market cap
-- **Realized Volatility** - Measure price stability over 7 and 30-day windows
-- **Sharpe Ratio** - Calculate risk-adjusted returns
-- **Correlation Matrix** - Identify relationships between different cryptocurrencies
-- **Fear & Greed Score** - Custom sentiment indicator combining volatility, momentum, and volume
+- **Market Dominance Index** - Track each coin's share of total market cap;
+- **Realized Volatility** - Measure price stability over 7 and 30-day windows;
+- **Sharpe Ratio** - Calculate risk-adjusted returns;
+- **Correlation Matrix** - Identify relationships between different cryptocurrencies;
+- **Fear & Greed Score** - Custom sentiment indicator combining volatility, momentum, and volume.
 
 ### 🛡️ Data Quality & Reliability
-- Automated validation checks (null values, duplicates, anomalies)
-- Structured logging with execution time tracking
-- Idempotent pipeline (safe to re-run multiple times)
-- Comprehensive error handling with retry mechanisms
+- Automated validation checks (null values, duplicates, anomalies);
+- Structured logging with execution time tracking;
+- Idempotent pipeline (safe to re-run multiple times);
+- Comprehensive error handling with retry mechanisms.
 
 ### 🗄️ Professional Data Warehouse
-- Dimensional modeling (star schema)
-- Optimized indexes for query performance
-- Pre-built analytical views
-- Full audit trail with ETL run logs
+- Dimensional modeling (star schema);
+- Optimized indexes for query performance;
+- Pre-built analytical views;
+- Full audit trail with ETL run logs.
 
 ---
 
@@ -213,14 +213,14 @@ python scripts/query_examples.py
 ```
 
 This will show:
-- Latest cryptocurrency metrics
-- Top 24h performers
-- Best risk-adjusted returns (Sharpe ratio)
-- Fear & Greed sentiment distribution
-- Highly correlated asset pairs
-- Most volatile cryptocurrencies
-- Distance from all-time highs
-- Market dominance breakdown
+- Latest cryptocurrency metrics;
+- Top 24h performers;
+- Best risk-adjusted returns (Sharpe ratio);
+- Fear & Greed sentiment distribution;
+- Highly correlated asset pairs;
+- Most volatile cryptocurrencies;
+- Distance from all-time highs;
+- Market dominance breakdown.
 
 ### Custom SQL Queries
 ```bash
@@ -327,16 +327,16 @@ Sharpe Ratio = (Return - Risk-Free Rate) / Volatility
 Composite sentiment indicator (0-100 scale).
 
 **Components**:
-- Price momentum (30%)
-- Volatility level (30%, inverse)
-- Volume changes (40%)
+- Price momentum (30%);
+- Volatility level (30%, inverse);
+- Volume changes (40%).
 
 **Scale**:
-- 0-20: Extreme Fear
-- 20-40: Fear
-- 40-60: Neutral
-- 60-80: Greed
-- 80-100: Extreme Greed
+- 0-20: Extreme Fear;
+- 20-40: Fear;
+- 40-60: Neutral;
+- 60-80: Greed;
+- 80-100: Extreme Greed.
 
 **Use Case**: Gauge market sentiment for contrarian investment strategies.
 
@@ -352,24 +352,24 @@ Pearson correlation between cryptocurrency returns.
 The pipeline includes comprehensive data quality checks:
 
 ### Validation Checks
-- ✅ **Null Value Check**: Ensures critical fields are populated
-- ✅ **Duplicate Check**: Prevents duplicate records
-- ✅ **Price Validity**: Verifies prices are positive and reasonable
-- ✅ **Anomaly Detection**: Flags unusual price changes (>50% in 24h)
-- ✅ **Data Freshness**: Ensures data is recent (<24 hours old)
+- ✅ **Null Value Check**: Ensures critical fields are populated;
+- ✅ **Duplicate Check**: Prevents duplicate records;
+- ✅ **Price Validity**: Verifies prices are positive and reasonable;
+- ✅ **Anomaly Detection**: Flags unusual price changes (>50% in 24h);
+- ✅ **Data Freshness**: Ensures data is recent (<24 hours old).
 
 ### Quality Metrics
 All checks are logged with:
-- Pass/fail status
-- Detailed failure reasons
-- Affected records
-- Execution timestamps
+- Pass/fail status;
+- Detailed failure reasons;
+- Affected records;
+- Execution timestamps.
 
 ### Handling Failures
-- Pipeline continues on quality warnings
-- Critical errors stop execution
-- All issues logged for investigation
-- Idempotent design allows safe re-runs
+- Pipeline continues on quality warnings;
+- Critical errors stop execution;
+- All issues logged for investigation;
+- Idempotent design allows safe re-runs.
 
 ---
 
